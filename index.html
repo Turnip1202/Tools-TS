@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket 客户端</title>
+</head>
+<body>
+    <div>
+        <input type="text" id="messageInput" placeholder="输入消息">
+        <button onclick="sendMessage()">发送</button>
+    </div>
+    <div id="messages"></div>
+
+    <script>
+        const ws = new WebSocket('ws://localhost:8080');
+        const messagesDiv = document.getElementById('messages');
+
+        ws.onopen = () => {
+            console.log('已连接到服务器');
+            appendMessage('已连接到服务器');
+        };
+
+        ws.onmessage = (event) => {
+            console.log('收到消息:', event.data);
+            appendMessage(`服务器: ${event.data}`);
+        };
+
+        ws.onclose = () => {
+            console.log('连接已关闭');
+            appendMessage('连接已关闭');
+        };
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value;
+            if (ws.readyState === WebSocket.OPEN) {
+                if(message.trim() !== ''){
+                    ws.send(message);
+                    appendMessage(`客户端: ${message}`);
+                    input.value = '';
+                    return;
+                }
+                appendMessage('消息不能为空');
+            } else {
+                console.log("连接未打开");
+            }
+        }
+
+        function appendMessage(message) {
+            const messageElement = document.createElement('div');
+            messageElement.textContent = message;
+            messagesDiv.appendChild(messageElement);
+        }
+   
+    </script>
+</body>
+</html>
