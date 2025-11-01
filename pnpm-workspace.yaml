@@ -1,0 +1,7 @@
+packages:
+  - 'shared'
+  - 'cache-localstorage'
+  - 'gproject'
+  - 'test'
+  - 'ts-decorator'
+
