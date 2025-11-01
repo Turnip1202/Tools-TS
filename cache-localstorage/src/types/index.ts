@@ -11,16 +11,20 @@ export interface StorageItem<T = unknown> {
 //   encryption?: boolean // 是否加密
 //   encryptionKey?: string  // 可选的加密密钥
 // }
-export interface IndexedDBOptions {
-	dbName?: string;
+
+export interface commonStorageOption{
+	encryption?: boolean;
+	encryptionKey?: string;
 	storeName?: string;
-	version?: number;
+	prefix?: string;
 	expire?: number;
 }
 
+export interface IndexedDBOptions extends commonStorageOption{
+	dbName?: string;
+	version?: number;
+}
 
-export interface StorageOptions extends IndexedDBOptions {
-	prefix?: string;
-	encryption?: boolean;
-	encryptionKey?: string;
+
+export interface StorageOptions extends commonStorageOption {
 }

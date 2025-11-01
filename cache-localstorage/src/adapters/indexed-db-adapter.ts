@@ -13,6 +13,8 @@ export class IndexedDBAdapter implements StorageAdapter {
 			storeName: options.storeName ?? "app_store",
 			version: options.version ?? 1,
 			expire: options.expire,
+			encryption: options.encryption,
+			encryptionKey: options.encryptionKey,
 		});
 	}
 

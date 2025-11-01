@@ -115,7 +115,10 @@ export const encryption = {
 
 			// 生成盐值和IV
 			const salt = generateSalt();
-			const iv = config?.iv ?? generateSecureRandom(12);
+			const ivRaw = config?.iv ?? generateSecureRandom(12);
+			// 确保 iv 使用标准的 ArrayBuffer，而不是 ArrayBufferLike
+			// 通过 Array.from 创建新的数组来避免类型问题
+			const iv = new Uint8Array(Array.from(ivRaw));
 
 			// 生成加密密钥
 			const keyMaterial = await generateKey(encryptionKey, salt);
@@ -163,9 +166,8 @@ export const encryption = {
 			};
 
 			// 转换 IV 从十六进制字符串回到 Uint8Array
-			const ivArray = new Uint8Array(
-				iv.match(/.{2}/g)?.map((byte: string) => Number.parseInt(byte, 16)) ?? [],
-			);
+			const ivBytes = iv.match(/.{2}/g)?.map((byte: string) => Number.parseInt(byte, 16)) ?? [];
+			const ivArray = new Uint8Array(ivBytes);
 
 			// 解码加密内容
 			const encryptedContent = Uint8Array.from(atob(content), (c: string) => c.charCodeAt(0));
